@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- <div class="row center-form">
+    <div class="col-xs-1 col-sm-2"></div>
+    <div class="col-xs-11 col-sm-10"><h2><u>{{ object.title }}</u> <button type="button" class="btn btn-primary" >Update</button> &nbsp;<button type="button" class="btn btn-danger">Delete</button></h2> </div>
+    
+</div> -->
+
+<div class="container center-form row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <h2><u>{{ object.title }}</u> <a type="button" class="btn btn-primary" href="{% url 'netra:systemupdate' object.system_id  %}" >Update</a> &nbsp;<a type="button" href="{% url 'netra:systemdelete' object.system_id  %}" class="btn btn-danger" style="color:white;">Delete</a></h2>
+        <table class="table table-dark table-striped">
+            <tbody>
+                <tr>
+                    <th>IP Address</th>
+                    <td><p>{{ object.ip_address }}</p></td>
+                </tr>
+                <tr>
+                    <th>Created At</th>
+                    <td><p>{{ object.created_date }}</p></td>
+                </tr>
+                <tr>
+                    <th>Modified at</th>
+                    <td><p>{{ object.modified_date }}</p></td>
+                </tr>
+                <tr>
+                    <th>Added by</th>
+                    <td><p>{{ object.added_by }}</p></td>
+                </tr>
+            </tbody>
+
+        </table>
+        
+    </div>
+    <div class="col-md-3"></div>
+    
+    
+</div>
+
+{% endblock content %}

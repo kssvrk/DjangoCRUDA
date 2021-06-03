@@ -1,7 +1,7 @@
 # Create your views here.
 from django.shortcuts import render
-from nrscnetra.forms import SystemForm
-from nrscnetra.models import System
+from nrscnetra.forms import SystemForm,JobForm
+from nrscnetra.models import System,Job
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
@@ -11,6 +11,7 @@ from django.urls import  reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 
+#----------------------------------------SYSTEM VIEWS---------------------------------------------
 
 class SystemCreate(LoginRequiredMixin, SuccessMessageMixin,CreateView):
     model = System
@@ -63,5 +64,30 @@ class SystemDelete(LoginRequiredMixin,SuccessMessageMixin,DeleteView):
         obj = self.get_object()
         messages.success(self.request, self.success_message % obj.__dict__)
         return super(SystemDelete, self).delete(request, *args, **kwargs)
+
+#----------------------------------- JOB VIEWS----------------------------------------------------------
+class JobCreate(LoginRequiredMixin, SuccessMessageMixin,CreateView):
+    model = Job
+    form_class = JobForm
+    success_message = "Job succesfully registered"
+    template_name = "nrscnetra/jobs/create.html"
+    success_url = reverse_lazy('netra:systemlist')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(JobCreate, self).get_context_data(**kwargs)
+        system=get_object_or_404(System, added_by=self.request.user,pk=self.kwargs['sysid'])
+        ctx['system_ipaddress'] = system.ip_address
+        #ctx['system_id']=system.system_id
+        ctx['form'].fields['system'].initial=system.system_id
+        return ctx
+    
+    def clean(self):
+        cleaned_data = super(JobForm, self).clean()
+        system_id=cleaned_data.get('system')
+        count=System.objects.filter(added_by=self.request.user,pk=system_id).count()
+        if(count==0):
+            self.add_error(None, ValidationError('System does not belong to the loggedin User'))
+
+
 
     

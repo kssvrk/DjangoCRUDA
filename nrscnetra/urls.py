@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^systemdetail/(?P<pk>\d+)/$', views.SystemDetail.as_view(), name='systemdetail'),
     url(r'^systemupdate/(?P<pk>\d+)/$', views.SystemUpdate.as_view(), name='systemupdate'),
     url(r'^systemdelete/(?P<pk>\d+)/$', views.SystemDelete.as_view(), name='systemdelete'),
+    url(r'^jobregister/(?P<sysid>\d+)/$', views.JobCreate.as_view(), name='jobregister'),
 ]
